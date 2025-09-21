@@ -19,7 +19,7 @@ dependencies = [
     "pandas==2.0.2",
     "scikit-learn==1.2.2",
     "scikit-image==0.20.0",
-    "matplotlib==3.7.1",
+    "matplotlib==3.9.4",
     "seaborn==0.12.2",
     "tqdm==4.65.0",
     "opencv-python==4.7.0.72",
