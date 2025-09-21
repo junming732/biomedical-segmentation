@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  biomedical-cpu:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: pytorch/pytorch:2.0.1-cpu
+    container_name: biomedical-cpu
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./checkpoints:/app/checkpoints
+    environment:
+      - PYTHONPATH=/app
+    command: python scripts/train.py
+
+  biomedical-gpu:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+    container_name: biomedical-gpu
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./checkpoints:/app/checkpoints
+    environment:
+      - PYTHONPATH=/app
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: python scripts/train.py
+
+  jupyter:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: pytorch/pytorch:2.0.1-cpu
+    container_name: biomedical-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./results:/app/results
+    environment:
+      - PYTHONPATH=/app
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''

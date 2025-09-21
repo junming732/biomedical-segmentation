@@ -1,0 +1,50 @@
+repos:
+  # Basic pre-commit hooks for whitespace, EOF, YAML, etc.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: debug-statements
+      - id: detect-private-key
+
+  # isort for import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        args:
+          - --profile
+          - black
+          # - --line-length=127
+
+  # Black code formatter
+  - repo: https://github.com/psf/black
+    rev: 25.9.0
+    hooks:
+      - id: black
+        # args:
+        #   - --line-length=127
+
+  # Flake8 for linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-docstrings]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run Pytest
+        entry: pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+        args: [--maxfail=1, --disable-warnings, -q, tests]
